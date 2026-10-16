@@ -1,0 +1,373 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #f3f3f6;
+    color: #34343f;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Menú grafito */
+
+.barra-lateral {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    padding: 32px 18px;
+    background: #24242c;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 8px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.marca-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: #7c3aed;
+    color: #ffffff;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.marca small {
+    display: block;
+    margin-top: 5px;
+    color: #b8b8c6;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+.menu-titulo {
+    margin: 46px 14px 16px;
+    color: #aaaabb;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px;
+    border-radius: 10px;
+    color: #d0d0db;
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.menu a i {
+    width: 24px;
+    text-align: center;
+    font-size: 1.15rem;
+    color: #c4b5fd;
+}
+
+.menu a:hover,
+.menu a:focus-visible {
+    background: #393044;
+    color: #ffffff;
+}
+
+.menu a:focus-visible,
+.marca:focus-visible {
+    outline: 2px solid #c4b5fd;
+    outline-offset: 3px;
+}
+
+.nota-lateral {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: auto;
+    padding: 24px 10px 0;
+    color: #b8b8c6;
+}
+
+.nota-lateral > i {
+    font-size: 1.4rem;
+    color: #c4b5fd;
+}
+
+.nota-lateral strong {
+    display: block;
+    color: #eeeeF4;
+    font-size: 0.8rem;
+}
+
+.nota-lateral small {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.65rem;
+}
+
+/* Área principal clara */
+
+.contenido {
+    margin-left: 250px;
+    padding: 40px;
+    max-width: 1700px;
+}
+
+.cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 30px;
+}
+
+.ruta {
+    color: #6e6e80;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+}
+
+h1 {
+    color: #252530;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+}
+
+.subtitulo {
+    color: #696979;
+    font-size: 0.92rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+.insignia {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background: #ffffff;
+    border: 1px solid #e3e3eb;
+    border-radius: 10px;
+    color: #545466;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+.insignia i {
+    color: #7c3aed;
+    font-size: 1rem;
+}
+
+.aviso {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    background: #ede7fa;
+    border: 1px solid #ded2f4;
+    border-radius: 14px;
+}
+
+.aviso-icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #7135c4;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.aviso strong {
+    color: #513080;
+    font-size: 0.9rem;
+}
+
+.aviso p {
+    margin: 5px 0 0;
+    color: #665779;
+    font-size: 0.82rem;
+    line-height: 1.6;
+}
+
+.titulo-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.titulo-panel h2 {
+    color: #34343f;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.titulo-panel > span {
+    color: #707080;
+    font-size: 0.75rem;
+}
+
+/* Tarjetas blancas */
+
+.tarjeta {
+    padding: 26px;
+    background: #ffffff;
+    border: 1px solid #e3e3eb;
+    border-radius: 16px;
+    box-shadow: 0 5px 20px rgba(36, 36, 44, 0.035);
+    scroll-margin-top: 24px;
+}
+
+.tarjeta:target {
+    border-color: #9464db;
+}
+
+.tarjeta-categoria {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 22px;
+    color: #707080;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+
+.icono {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: #f1ebfc;
+    color: #7438ca;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.tarjeta h3 {
+    margin-bottom: 18px;
+    color: #292934;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.tarjeta section {
+    font-size: 0.9rem;
+    line-height: 2;
+    overflow-wrap: anywhere;
+}
+
+.tarjeta section span {
+    color: #707080;
+}
+
+.tarjeta section strong {
+    color: #56318a;
+}
+
+.espera {
+    margin-bottom: 0;
+    color: #707080;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 22px;
+    border-top: 1px solid #dedee7;
+    color: #707080;
+    font-size: 0.7rem;
+}
+
+/* Celulares y pantallas pequeñas */
+
+@media (max-width: 767px) {
+    .barra-lateral {
+        position: static;
+        width: 100%;
+        padding: 22px 16px;
+    }
+
+    .menu-titulo {
+        margin: 26px 12px 12px;
+    }
+
+    .menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .menu a {
+        padding: 10px;
+        font-size: 0.76rem;
+    }
+
+    .nota-lateral {
+        display: none;
+    }
+
+    .contenido {
+        margin-left: 0;
+        padding: 26px 16px;
+    }
+
+    .cabecera {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .aviso {
+        padding: 18px;
+    }
+
+    .titulo-panel {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .tarjeta {
+        padding: 22px;
+    }
+}
