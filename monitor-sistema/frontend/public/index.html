@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Monitor del Sistema</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="index.js" defer></script>
+  <style>
+    body {
+      font-family: monospace;
+      background: #111;
+      color: #0f0;
+      padding: 20px;
+    }
+    section {
+      background: #222;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #0ff;
+      margin-top: 0;
+    }
+    span {
+      color: #ff0;
+    }
+  </style>
+</head>
+<body>
+  <h2>📡 Monitor del Sistema en Tiempo Real</h2>
+  <section id="cpu"><h3>CPU</h3>Conectando...</section>
+  <section id="memoria"><h3>Memoria</h3>Conectando...</section>
+  <section id="discos"><h3>Discos</h3>Conectando...</section>
+  <section id="red"><h3>Red</h3>Conectando...</section>
+</body>
+</html>
