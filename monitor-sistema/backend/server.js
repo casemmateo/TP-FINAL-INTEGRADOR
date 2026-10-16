@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const socketIo = require('socket.io');
 const si = require('systeminformation');
 const cors = require('cors');
@@ -14,6 +15,13 @@ const io = socketIo(server, {
         methods: ['GET', 'POST']
     }
 });
+
+// Servir el frontend desde su carpeta.
+// __dirname representa la carpeta donde está server.js.
+// path.join construye la ruta hasta frontend/public.
+app.use(express.static(
+    path.join(__dirname, '../frontend/public')
+));
 
 function bytesToGB(bytes) {
     return (bytes / (1024 ** 3)).toFixed(2) + ' GB';
@@ -30,6 +38,7 @@ async function obtenerDatosSistema() {
         ]);
 
         const sda1 = discos.find(d => d.mount === '/') || null;
+
         const swapSize = memoria.swaptotal > 0
             ? memoria.swaptotal
             : 975 * 1024 * 1024;
@@ -103,14 +112,7 @@ async function obtenerDatosSistema() {
     }
 }
 
-// Página inicial del servidor.
-app.get('/', (req, res) => {
-    res.send(
-        'Servidor de monitoreo activo. Usa <a href="/api/sistema">/api/sistema</a>'
-    );
-});
-
-// API para consultar los datos desde el navegador o con fetch.
+// La API sigue disponible para consultar los datos directamente.
 app.get('/api/sistema', async (req, res) => {
     try {
         const datos = await obtenerDatosSistema();
@@ -120,7 +122,6 @@ app.get('/api/sistema', async (req, res) => {
     }
 });
 
-// Enviar datos cada cinco segundos a cada cliente conectado.
 io.on('connection', (socket) => {
     console.log('Cliente conectado');
 
@@ -139,9 +140,8 @@ io.on('connection', (socket) => {
     });
 });
 
-// Escuchar en las interfaces de red del servidor.
 const PORT = 3000;
 
 server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor corriendo en http://0.0.0.0:${PORT}`);
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
