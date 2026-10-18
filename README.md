@@ -48,6 +48,7 @@ ejemplo base del material.
 - Ramas `mateo1` y `mateo2`.
 - Rama `main` para integrar los avances.
 - Markdown y Mermaid para la documentación.
+- GitHub Projects para organizar y seguir las tareas.
 
 ## Estructura del repositorio
 
@@ -222,6 +223,35 @@ Cambiar de rama no cambia el nombre ni el correo del autor de los commits.
 Subir cambios a GitHub no actualiza automáticamente la instalación
 de Debian. Los archivos modificados deben trasladarse al servidor.
 
+## Organización de tareas con GitHub Projects
+
+El seguimiento del trabajo se realiza en el siguiente tablero:
+
+[Planificación del monitor GNU/Linux](https://github.com/users/casemmateo/projects/1)
+
+El tablero utiliza las siguientes columnas:
+
+- **Pendientes (Backlog):** tareas que todavía no se iniciaron.
+- **Listo (Ready):** tareas preparadas para comenzar.
+- **En progreso (In progress):** tareas que se están realizando.
+- **En revisión (In review):** tareas pendientes de comprobar.
+- **Hecho (Done):** tareas terminadas.
+
+Las tareas se registran como incidencias del repositorio. Cada una
+incluye una descripción y una lista de comprobación. Los responsables
+se asignan según el trabajo de cada integrante.
+
+El tablero incluye registros del backend, el frontend y la documentación
+realizados antes de su creación, con referencias a sus commits.
+También incluye las pruebas pendientes y la preparación de la aplicación móvil.
+
+El proyecto es privado. Ambos integrantes tienen acceso; para que otras
+personas puedan consultarlo será necesario otorgarles acceso o cambiar
+su visibilidad antes de la entrega.
+
+Los cambios del tablero se guardan en GitHub. Los cambios en los archivos
+del proyecto se guardan mediante commits en las ramas correspondientes.
+
 ## Base del material y adaptaciones
 
 Se tomó como base la guía de armado del backend y los ejemplos
@@ -255,10 +285,12 @@ Adaptaciones realizadas:
 - Inicio automático del servicio después de reiniciar Debian.
 - Acceso al frontend servido por Express.
 - Conexión de Socket.IO y recepción de datos en el panel.
+- Acceso de ambos integrantes al tablero de GitHub Projects.
 
 ## Pendientes de la entrega
 
-- Configurar GitHub Projects y registrar las tareas en el tablero Kanban.
+- Completar la asignación de responsables y mantener actualizado el tablero.
+- Garantizar el acceso del docente al tablero para la entrega.
 - Revisar los apartados Charts y GitHub Helpers con su material específico.
 - Preparar y comprobar la versión móvil solicitada en el TP.
 - Completar las pruebas de todas las secciones y la documentación final.
