@@ -23,8 +23,9 @@ app.use(express.static(
     path.join(__dirname, '../frontend/public')
 ));
 
-function bytesToGB(bytes) {
-    return (bytes / (1024 ** 3)).toFixed(2) + ' GB';
+// Al dividir por 1024 elevado a 3, la unidad es GiB.
+function bytesToGiB(bytes) {
+    return (bytes / (1024 ** 3)).toFixed(2) + ' GiB';
 }
 
 async function obtenerDatosSistema() {
@@ -37,21 +38,11 @@ async function obtenerDatosSistema() {
             si.networkInterfaces()
         ]);
 
+        // Buscar la raíz por su montaje, no por el nombre del dispositivo.
         const sda1 = discos.find(d => d.mount === '/') || null;
 
-        const swapSize = memoria.swaptotal > 0
-            ? memoria.swaptotal
-            : 975 * 1024 * 1024;
-
-        const sda5 = {
-            fs: '/dev/sda5',
-            size: swapSize,
-            used: memoria.swapused,
-            mount: '[SWAP]',
-            use: memoria.swaptotal > 0
-                ? ((memoria.swapused / memoria.swaptotal) * 100).toFixed(2) + '%'
-                : '0%'
-        };
+        // Usar el tamaño real de swap, sin agregar un valor de respaldo.
+        const swapSize = memoria.swaptotal;
 
         const red = await Promise.all(
             interfaces.map(async (iface) => {
@@ -62,10 +53,10 @@ async function obtenerDatosSistema() {
                     interfaz: iface.iface,
                     ip4: iface.ip4,
                     mac: iface.mac,
-                    recibidoMB: s.rx_bytes
+                    recibidoMiB: s.rx_bytes
                         ? (s.rx_bytes / (1024 * 1024)).toFixed(2)
                         : '0.00',
-                    enviadoMB: s.tx_bytes
+                    enviadoMiB: s.tx_bytes
                         ? (s.tx_bytes / (1024 * 1024)).toFixed(2)
                         : '0.00'
                 };
@@ -81,28 +72,29 @@ async function obtenerDatosSistema() {
                 temperatura: cpuTemp.main ? `${cpuTemp.main} °C` : 'N/D'
             },
             memoria: {
-                total: bytesToGB(memoria.total),
-                libre: bytesToGB(memoria.available),
-                usado: bytesToGB(memoria.total - memoria.available)
+                total: bytesToGiB(memoria.total),
+                libre: bytesToGiB(memoria.available),
+                usado: bytesToGiB(memoria.total - memoria.available)
             },
             particiones: {
+                // Conservamos las claves del ejemplo del material.
                 sda1: sda1 ? {
                     filesystem: sda1.fs,
-                    tamaño: bytesToGB(sda1.size),
-                    usado: bytesToGB(sda1.used),
-                    libre: bytesToGB(sda1.size - sda1.used),
+                    tamaño: bytesToGiB(sda1.size),
+                    usado: bytesToGiB(sda1.used),
+                    libre: bytesToGiB(sda1.available),
                     usoPorcentaje: sda1.use + '%',
                     puntoMontaje: sda1.mount
                 } : null,
-                sda5: {
-                    filesystem: sda5.fs,
-                    tamaño: bytesToGB(sda5.size),
-                    usado: bytesToGB(sda5.used),
-                    libre: bytesToGB(sda5.size - sda5.used),
-                    usoPorcentaje: sda5.use,
-                    puntoMontaje: sda5.mount,
+                // Estos datos representan el total de swap del sistema.
+                sda5: swapSize > 0 ? {
+                    tamaño: bytesToGiB(swapSize),
+                    usado: bytesToGiB(memoria.swapused),
+                    libre: bytesToGiB(swapSize - memoria.swapused),
+                    usoPorcentaje:
+                        ((memoria.swapused / swapSize) * 100).toFixed(2) + '%',
                     esSwap: true
-                }
+                } : null
             },
             red
         };

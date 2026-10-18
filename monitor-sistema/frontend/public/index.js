@@ -70,7 +70,7 @@ socket.on('datosSistema', (datos) => {
     document.getElementById('memoria').innerHTML = `
         <h3>Memoria</h3>
         <span>Total:</span> ${datos.memoria.total}<br>
-        <span>Libre:</span> ${datos.memoria.libre}<br>
+        <span>Disponible:</span> ${datos.memoria.libre}<br>
         <span>Usado:</span> ${datos.memoria.usado}
     `;
 
@@ -79,12 +79,14 @@ socket.on('datosSistema', (datos) => {
     if (datos.particiones.sda1) {
         discosHtml += `
             <strong>Raíz:</strong><br>
-            <span>FS:</span> ${datos.particiones.sda1.filesystem}<br>
+            <span>Dispositivo:</span> ${datos.particiones.sda1.filesystem}<br>
             <span>Tamaño:</span> ${datos.particiones.sda1.tamaño}<br>
             <span>Usado:</span> ${datos.particiones.sda1.usado}<br>
-            <span>Libre:</span> ${datos.particiones.sda1.libre}<br>
+            <span>Disponible:</span> ${datos.particiones.sda1.libre}<br>
             <span>Uso:</span> ${datos.particiones.sda1.usoPorcentaje}<br><br>
         `;
+    } else {
+        discosHtml += '<p>No se detectó la partición raíz.</p>';
     }
 
     if (datos.particiones.sda5) {
@@ -95,6 +97,8 @@ socket.on('datosSistema', (datos) => {
             <span>Libre:</span> ${datos.particiones.sda5.libre}<br>
             <span>Uso:</span> ${datos.particiones.sda5.usoPorcentaje}
         `;
+    } else {
+        discosHtml += '<p>No hay swap habilitada.</p>';
     }
 
     document.getElementById('discos').innerHTML = discosHtml;
@@ -104,8 +108,8 @@ socket.on('datosSistema', (datos) => {
             <span>Interfaz:</span> ${iface.interfaz}<br>
             <span>IP:</span> ${iface.ip4}<br>
             <span>MAC:</span> ${iface.mac}<br>
-            <span>Recibido:</span> ${iface.recibidoMB} MB<br>
-            <span>Enviado:</span> ${iface.enviadoMB} MB
+            <span>Recibido:</span> ${iface.recibidoMiB} MiB<br>
+            <span>Enviado:</span> ${iface.enviadoMiB} MiB
         </div>
     `).join('');
 
