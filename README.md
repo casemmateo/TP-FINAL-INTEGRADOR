@@ -1,65 +1,82 @@
 # Monitor de recursos GNU/Linux
 
-Trabajo Final Integrador de Práctica Profesionalizante III.
+**Trabajo Final Integrador – Práctica Profesionalizante III**
 
-Desarrollamos una aplicación web para consultar los recursos de un servidor
-Debian desde una computadora o un celular. Partimos del ejemplo del profesor
-y adaptamos el diseño para organizar la información por secciones.
+Desarrollamos un monitor para consultar los recursos de un servidor GNU/Linux (Debian) desde una computadora o un celular. Tomamos como base el material de la materia y adaptamos el diseño para mostrar la información por secciones.
 
-## ¿Qué muestra?
+El backend obtiene los datos del servidor y los expone mediante una API HTTP. El frontend los muestra en pantalla y recibe actualizaciones automáticas con Socket.IO.
 
-- Procesador: fabricante, modelo, núcleos y temperatura, cuando está disponible.
-- Memoria RAM: total, disponible y utilizada.
-- Almacenamiento: espacio de la partición raíz y uso de swap.
-- Red: interfaces, direcciones IP, MAC y datos recibidos y enviados.
+## ¿Qué muestra el monitor?
 
-Los datos se actualizan automáticamente cada cinco segundos mediante
-Socket.IO. El menú permite ver una sección por vez o un resumen general.
+- **Procesador:** fabricante, modelo, núcleos y temperatura, cuando está disponible.
+- **Memoria RAM:** total, disponible y utilizada.
+- **Almacenamiento:** espacio de la partición raíz y memoria swap.
+- **Red:** interfaces, direcciones IP y MAC, datos recibidos y enviados.
+- **Vista general:** resumen de los recursos y navegación por secciones.
+
+La información se actualiza cada **5 segundos**, sin necesidad de recargar la página.
 
 ## Tecnologías utilizadas
 
-En el frontend usamos HTML, CSS, JavaScript y Bootstrap 5.
-También incorporamos Bootstrap Icons para los iconos.
+| Parte del proyecto | Tecnologías | Uso |
+| --- | --- | --- |
+| Frontend | HTML, CSS, JavaScript, Bootstrap 5, Bootstrap Icons | Estructura, diseño y actualización del panel. |
+| Backend | Node.js, Express, HTTP, CORS, systeminformation | Servidor web, API y lectura de recursos de Debian. |
+| Comunicación | Socket.IO | Envío periódico de datos del backend al frontend. |
+| Dependencias | pnpm | Instalación y administración de paquetes. |
+| Inicio automático | systemd | Ejecución del backend al iniciar Debian. |
+| Aplicación Android | HTML2Apk | Empaquetado de una pantalla de conexión para abrir el monitor desde el celular. |
+| Control de versiones | Git y GitHub | Ramas, commits e integración del trabajo. |
+| Organización y documentación | GitHub Projects, Markdown, Mermaid, GitHub1s y GitDiagram | Seguimiento de tareas, documentación y análisis del repositorio. |
 
-En el backend usamos Node.js, Express, HTTP, Socket.IO, CORS y
-systeminformation. Las dependencias se administran con pnpm.
+Durante el desarrollo también utilizamos inteligencia artificial como apoyo para consultas, explicaciones y revisión de código. Las pruebas del funcionamiento se realizaron en nuestro entorno.
 
-Para organizar el trabajo usamos Git, GitHub y un tablero Kanban.
-La documentación está escrita en Markdown e incluye un diagrama Mermaid.
+## Estructura del repositorio
 
-## Organización del proyecto
+```text
+PPIII-Monitoreo/
+├── README.md
+├── Monitor_de_Sistema-v1.0-signed.apk
+├── docs/
+│   ├── github-helpers.md
+│   └── evidencias/
+│       ├── github1s-monitor.png
+│       └── gitdiagram-monitor.png
+└── monitor-sistema/
+    ├── .gitignore
+    ├── backend/
+    │   ├── package.json
+    │   ├── pnpm-lock.yaml
+    │   └── server.js
+    ├── deploy/
+    │   └── monitor-sistema.service
+    └── frontend/
+        └── public/
+            ├── index.html
+            ├── index.js
+            └── style.css
+```
 
-| Carpeta o archivo | Contenido |
-| --- | --- |
-| `monitor-sistema/backend/` | Servidor, API y dependencias. |
-| `monitor-sistema/frontend/public/` | HTML, CSS y JavaScript del panel. |
-| `monitor-sistema/deploy/` | Configuración del servicio systemd. |
-| `docs/` | Documentación complementaria y evidencias. |
-| `README.md` | Presentación e instrucciones del proyecto. |
-
-El archivo `.gitignore` evita subir las dependencias de `node_modules`.
+El archivo `.gitignore` evita incorporar `node_modules` al repositorio. Las dependencias se instalan con pnpm.
 
 ## ¿Cómo funciona?
 
-El backend consulta los recursos de Debian con systeminformation.
-Express entrega la página al navegador y Socket.IO envía los datos
-para actualizar el panel sin recargarlo.
-
-También se pueden consultar los datos directamente en formato JSON
-mediante la ruta `/api/sistema`.
+El backend utiliza **systeminformation** para consultar los recursos de Debian. **Express** entrega los archivos del frontend y publica la ruta `/api/sistema`, que devuelve los datos en formato JSON. **Socket.IO** envía actualizaciones a los clientes conectados cada cinco segundos.
 
 ```mermaid
 flowchart TD
-    A["Recursos de Debian"] -->|"systeminformation"| B["Backend Node.js"]
-    B -->|"Express entrega la página"| C["Navegador"]
-    B -->|"Socket.IO actualiza los datos"| C
+    A["Recursos del servidor Debian"] -->|"systeminformation"| B["Backend Node.js y Express"]
+    B -->|"Entrega HTML, CSS y JavaScript"| C["Frontend en el navegador"]
+    B -->|"Socket.IO: datosSistema cada 5 segundos"| C
     B -->|"GET /api/sistema"| D["Respuesta JSON"]
+    E["APK Android"] -->|"Abre la dirección del monitor"| C
 ```
 
-## Instalación y uso
+El frontend utiliza `const socket = io();` para conectarse al mismo servidor desde el que se abrió la página. Por eso no es necesario escribir una IP fija dentro de `index.js`.
 
-Se necesita un servidor GNU/Linux con Node.js 24 y pnpm.
-El equipo desde el que se abre el panel debe tener conexión con el servidor.
+## Instalación y ejecución manual
+
+Se necesita un servidor GNU/Linux con **Node.js 24** y **pnpm**, además de conexión de red entre el servidor y el equipo cliente.
 
 Desde la raíz del repositorio:
 
@@ -69,51 +86,37 @@ pnpm install
 pnpm start
 ```
 
-Para abrir el panel:
+Abrir el panel desde un navegador:
 
 ```text
 http://IP_DEL_SERVIDOR:3000/
 ```
 
-Para consultar la API:
+Consultar la API:
 
 ```text
 http://IP_DEL_SERVIDOR:3000/api/sistema
 ```
 
-La IP de Debian se puede consultar con:
+Para conocer la dirección IP de Debian:
 
 ```bash
 ip -4 -br address
 ```
 
-El frontend utiliza `io()` para conectarse al servidor desde el que se
-abrió la página. Si cambia la IP de Debian, hay que cambiar la dirección
-en el navegador, pero no el código del frontend.
+Reemplazar `IP_DEL_SERVIDOR` por la dirección actual de la máquina Debian. Para detener la ejecución manual, utilizar `Ctrl + C`. Si el servicio systemd ya está funcionando, no iniciar otra instancia del backend en el mismo puerto.
 
-El backend escucha en `0.0.0.0`, por lo que acepta conexiones por las
-interfaces de red del servidor.
-
-Para detener la ejecución manual se utiliza `Ctrl + C`.
-Si el servicio systemd ya está funcionando, no se debe iniciar otra
-instancia en el mismo puerto.
-
-El navegador necesita acceso a Internet para cargar Bootstrap,
-Bootstrap Icons y el cliente de Socket.IO desde sus servicios CDN.
+El navegador necesita acceso a Internet para cargar Bootstrap, Bootstrap Icons y el cliente de Socket.IO desde sus respectivos CDN.
 
 ## Inicio automático en Debian
 
-En nuestra instalación, el proyecto está ubicado en:
+En la instalación utilizada, el proyecto se encuentra en:
 
 ```text
 /var/www/html/monitor-sistema/
 ```
 
-El archivo `deploy/monitor-sistema.service` permite iniciar el backend
-automáticamente al encender Debian. Utiliza esa ubicación y el ejecutable
-`/usr/bin/node`.
-
-Con el proyecto y sus dependencias instalados, ejecutar como root:
+El archivo `monitor-sistema/deploy/monitor-sistema.service` contiene la configuración del servicio. Con el proyecto y las dependencias instalados en Debian, ejecutar como administrador:
 
 ```bash
 cp /var/www/html/monitor-sistema/deploy/monitor-sistema.service /etc/systemd/system/
@@ -121,83 +124,70 @@ systemctl daemon-reload
 systemctl enable --now monitor-sistema
 ```
 
-Para consultar su estado:
+Para comprobar su estado:
 
 ```bash
 systemctl status monitor-sistema --no-pager -l
+systemctl is-enabled monitor-sistema
+systemctl is-active monitor-sistema
 ```
 
-Después de modificar el backend:
+Si se modifica el backend y se actualizan sus archivos en Debian:
 
 ```bash
 systemctl restart monitor-sistema
 ```
 
-## Trabajo en equipo
+Subir cambios a GitHub **no actualiza automáticamente** la instalación que está ejecutándose en Debian.
 
-Cada integrante trabaja en su rama: `mateo1` o `mateo2`.
-Los avances se guardan con commits, se suben a GitHub y se integran
-en `main` mediante merge cuando están revisados.
+## Aplicación Android
 
-Subir un cambio a GitHub no actualiza la instalación de Debian.
-Los archivos modificados también deben trasladarse al servidor.
+El repositorio incluye `Monitor_de_Sistema-v1.0-signed.apk`, creada con **HTML2Apk**.
 
-Organizamos las tareas pendientes, en progreso y terminadas en el
-[tablero Kanban](https://github.com/users/casemmateo/projects/1).
+La aplicación muestra una pantalla para ingresar la IP actual del servidor Debian y abrir el monitor mediante HTTP en el puerto `3000`. De esta manera, no depende de una IP escrita de forma permanente en la APK.
 
-El tablero es privado y ambos integrantes tienen acceso.
-Queda pendiente garantizar el acceso del docente para la entrega.
+Para utilizarla, el teléfono debe tener acceso por red al servidor y el backend debe estar funcionando. La aplicación abre el monitor servido por Express; **no contiene una copia independiente del backend**.
 
-## GitHub Helpers
+La APK fue probada y funcionó en un teléfono Android. También comprobamos el acceso al panel desde el navegador de un celular. La compatibilidad de la APK puede variar según el dispositivo y su componente WebView.
 
-Utilizamos dos herramientas web del material de clase:
+## Git, GitHub y trabajo en equipo
 
-- **GitHub1s:** para explorar el código y consultar el README desde el navegador.
-- **GitDiagram:** para generar un diagrama del repositorio y revisar sus componentes.
+Trabajamos con las ramas `mateo1` y `mateo2`, y utilizamos `main` para integrar los avances mediante merge. Los cambios se registraron con commits y se publicaron en GitHub.
 
-La explicación y las capturas están en
-[Uso de GitHub Helpers](docs/github-helpers.md).
+Organizamos el seguimiento en el [tablero Kanban de GitHub Projects](https://github.com/users/casemmateo/projects/1). Las seis tareas del proyecto quedaron ubicadas en **Hecho (Done)**.
 
-## Adaptaciones al material
+El tablero es privado. Para que el docente pueda verlo será necesario otorgarle acceso o ajustar su visibilidad.
 
-Tomamos como base la guía y el ejemplo de monitoreo del profesor.
-Separamos backend y frontend en carpetas, publicamos el panel con Express
-y adaptamos el diseño con Bootstrap, navegación por secciones e iconos.
-Bootstrap Icons fue un complemento agregado al ejemplo.
+### GitHub Helpers
 
-Durante las pruebas también corregimos las unidades a GiB y MiB,
-el espacio disponible del disco y los datos de swap. Eliminamos el
-tamaño de respaldo que mostraba el ejemplo cuando no había swap.
+Utilizamos **GitHub1s** para consultar el repositorio desde el navegador y **GitDiagram** para generar un diagrama de sus componentes.
 
-Estas correcciones son adaptaciones nuestras y mantienen las mismas
-dependencias del backend. Para comprobar el campo de espacio disponible
-consultamos la
-[documentación de systeminformation](https://systeminformation.io/filesystem.html).
+La explicación y las capturas están en [docs/github-helpers.md](docs/github-helpers.md).
 
-## Pruebas realizadas y detalles a tener en cuenta
+## Adaptaciones y pruebas
 
-Probamos la API, la navegación entre secciones y las actualizaciones
-automáticas. Comparamos datos con los comandos de Debian y comprobamos
-el inicio del servicio después de reiniciar la máquina virtual.
+Partimos de los ejemplos del profesor y realizamos estas adaptaciones:
 
-También probamos el panel desde el navegador de un celular conectado
-a la misma red. La instalación de la APK todavía no fue probada.
+- Separamos backend y frontend en carpetas.
+- Publicamos el frontend desde Express.
+- Incorporamos un menú por secciones, tarjetas y Bootstrap Icons.
+- Utilizamos `io()` para no fijar la dirección IP en el JavaScript del navegador.
+- Corregimos las unidades de memoria y almacenamiento a GiB/MiB, la información de espacio disponible y la representación de swap.
+- Configuramos el inicio automático del servidor mediante systemd.
 
-Al interpretar los datos:
+Comprobamos la consulta de la API, la navegación del panel, las actualizaciones mediante Socket.IO, los datos mostrados en Debian y el inicio del servicio después de reiniciar la máquina virtual. También probamos el acceso desde dispositivos móviles.
 
-- La temperatura puede aparecer como `N/D` si no está disponible.
-- La RAM y el almacenamiento se muestran en GiB; el tráfico de red, en MiB.
-- Los datos de red son cantidades acumuladas, no velocidades.
-- El espacio disponible del disco puede diferir del total menos lo usado.
-- Las claves `sda1` y `sda5` se conservaron del ejemplo en el JSON.
-  La raíz se busca por su montaje `/` y la swap representa el total del sistema.
-- El panel muestra información del procesador, pero no su porcentaje de uso.
-- La aplicación funciona mediante HTTP y no incluye autenticación.
+## Limitaciones conocidas
 
-## Pendientes
+- La temperatura puede aparecer como `N/D` cuando el sistema no permite consultarla.
+- Los valores de tráfico de red son acumulados, no velocidades instantáneas.
+- Las claves `sda1` y `sda5` del JSON se conservaron del ejemplo original; no necesariamente representan los nombres reales de los dispositivos.
+- Se muestra información del procesador, pero no su porcentaje de utilización.
+- La aplicación utiliza HTTP y no incorpora autenticación.
 
-- Revisar el apartado Charts con el material correspondiente.
-- Completar responsables y evidencias del tablero.
-- Garantizar el acceso del docente al tablero.
-- Crear y probar la APK como última etapa.
-- Realizar la revisión final de la entrega.
+## Enlaces del proyecto
+
+- [Repositorio GitHub](https://github.com/casemmateo/TP-FINAL-INTEGRADOR)
+- [Tablero Kanban](https://github.com/users/casemmateo/projects/1)
+- [Vista en GitHub1s](https://github1s.com/casemmateo/TP-FINAL-INTEGRADOR/tree/main)
+- [Vista en GitDiagram](https://gitdiagram.com/casemmateo/TP-FINAL-INTEGRADOR)
